@@ -5,8 +5,7 @@ const savedListModel = require("../model/savedListModel")
 const mongoose = require('mongoose');
 
 exports.createUser = async (req, res) => {
-  const { name = '', email = '', password = '' } = req?.body || {};
-  console.log("i am getting called")
+  const { name = '', email = '', password = '' } = req?.body || {}
   console.log(name, email, password)
 
   try {
@@ -14,7 +13,7 @@ exports.createUser = async (req, res) => {
       return res.status(400).send({ status: false, message: 'Name is required field' });
     }
     if (!email) {
-      return res.status(400).send({ status: false, message: 'email is required field' });
+      return res.status(400).send({ status: false, message: 'Email is required field' });
     }
     if (!password) {
       return res.status(400).send({ status: false, message: 'Password is required field' });
@@ -30,21 +29,28 @@ exports.createUser = async (req, res) => {
       email,
       password: hashedPassword,
     });
-
     await newUser.save();
-    console.log("user created successfully")
+    console.log("User created successfully");
+    const token = jwt.sign(
+      { userId: newUser._id, email: newUser.email }, 
+      process.env.JWT_SECRET, 
+      { expiresIn: '1d' }
+    );
+
+    console.log("JWT token created:", token);
     return res.status(201).send({
       status: true,
       message: 'User created successfully',
       data: {
-        name: newUser.name,
+        token,
+        userId: newUser._id,
         email: newUser.email,
       },
     });
 
   } catch (error) {
     console.log(error?.message || error);
-    res.status(error?.statusCode || 500).send({
+    return res.status(error?.statusCode || 500).send({
       state: false,
       message: error?.message || 'Internal server error',
     });
