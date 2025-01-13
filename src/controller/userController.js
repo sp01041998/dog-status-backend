@@ -220,12 +220,18 @@ exports.removeImageFromList = async (req, res) => {
       (image) => image.toString() !== imageId
     );
 
+    if(!savedList.savedImages.length){
+       await savedListModel.findOneAndUpdate({ _id: listId}, {isDeleted : true}, {new : true});
+      return res.status(200).json({
+        status: 'success',
+        message: 'Saved list(s) fetched successfully',
+        data: []
+      });
+    }
+
     await savedList.save();
 
     const newList = await savedListModel.findOne({ _id: listId, isDeleted: false }).populate('savedImages', 'imageUrl imageName statusCode').exec();
-
-
-
     return res.status(200).json({
       status: 'success',
       message: 'Saved list(s) fetched successfully',

@@ -5,7 +5,6 @@ const cors = require('cors');
 
 const dotenv = require('dotenv');
 
-// Load .env file
 dotenv.config();
 
 app.use(cors({
@@ -14,7 +13,6 @@ app.use(cors({
     allowedHeaders: ['Content-Type', 'Authorization'], 
   }));
 
-// Middleware to parse JSON request bodies
 app.use(express.json());
 
 
@@ -26,7 +24,6 @@ mongoose.connect(process.env.MONGO_URI).then(res => {
     console.log(err)
 })
 
-// Home route
 app.get('/', (req, res) => {
     res.send('Hello, World!');
 });
@@ -37,7 +34,6 @@ app.use("/image", require("./src/route/imageRoute"))
 
 
 
-// Start the server
 const PORT = 3003;
 app.listen(PORT, () => {
     console.log(`Server is running on http://localhost:${PORT}`);
