@@ -9,7 +9,7 @@ const dotenv = require('dotenv');
 dotenv.config();
 
 app.use(cors({
-    origin: 'https://dog-status-backend.onrender.com',
+    origin: 'https://dog-status-frontend.vercel.app',
     methods: ['GET', 'POST', 'PUT', 'DELETE'],
     allowedHeaders: ['Content-Type', 'Authorization'], 
   }));
