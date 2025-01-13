@@ -96,19 +96,17 @@ exports.createUserList = async (req, res) => {
 
       console.log(userId, savedImages, listName);
 
-      // Create a new saved list document using the savedListModel (renamed to avoid conflict)
+
       const newSavedList = new savedListModel({
           userId,
           savedImages,
           listName
       });
-
-      // Save the new saved list
       const savedListDoc = await newSavedList.save();
 
       return res.status(201).json({
           message: 'Saved list created successfully',
-          savedList: savedListDoc // Return the saved list document
+          savedList: savedListDoc 
       });
   } catch (error) {
       console.error('Error creating user list:', error);
@@ -172,19 +170,12 @@ exports.deleteSavedList = async (req, res) => {
       .populate('savedImages', 'imageUrl imageName statusCode')
       .exec();
 
-      // if (savedLists.length === 0) {
-      //   return res.status(404).json({
-      //     status: 'error',
-      //     message: 'Saved list(s) not found'
-      //   });
-      // }
-  
       return res.status(200).json({
         status: 'success',
         message: 'Saved list(s) fetched successfully',
         data: savedLists
       });
-    // return res.status(200).json({ message: "List marked as deleted successfully.", data: result });
+   
   } catch (error) {
     console.error("Error deleting saved list:", error);
     return res.status(500).json({ message: "Internal server error." });
